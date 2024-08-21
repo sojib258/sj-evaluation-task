@@ -1,7 +1,9 @@
 "use client";
 import { useUser } from "@/context/UserContext";
+import { GoogleLogin } from "@react-oauth/google";
 import type { CheckboxProps } from "antd";
 import { Button, Checkbox, Col, Row, message } from "antd";
+import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -10,6 +12,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 type FormFields = {
   username: string;
   password: string;
+};
+
+type DecodedToken = {
+  name: string;
 };
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
@@ -58,6 +64,18 @@ const SignIn = () => {
       setLoading(false);
     }
   };
+
+  const handleSuccess = (credentials: any) => {
+    const decodedValue = jwtDecode<DecodedToken>(credentials.credential);
+    // set user in context
+    setUser({
+      fullname: decodedValue.name,
+      loggedin: true,
+    });
+    router.push("/");
+  };
+
+  const handleError = () => {};
 
   return (
     <Row className="min-h-[calc(100vh-14vh)]">
@@ -158,10 +176,11 @@ const SignIn = () => {
               forgot password?
             </Button>
           </div>
-          <div style={{ marginBottom: "1rem" }}>
+          <div style={{ marginBottom: "1rem", textAlign: "center" }}>
             <Button
               disabled={loading}
               type="primary"
+              block
               style={{
                 fontWeight: "bold",
                 minWidth: "100px",
@@ -172,8 +191,17 @@ const SignIn = () => {
               Log In
             </Button>
           </div>
-          <div style={{ marginBottom: "1rem" }}>
-            <p style={{ textAlign: "center" }}>or sign in with</p>
+          <div
+            style={{
+              marginBottom: "1rem",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <p style={{ textAlign: "center", marginBottom: ".8rem" }}>or</p>
+            <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
           </div>
           <div>
             <p style={{ textAlign: "center" }}>
