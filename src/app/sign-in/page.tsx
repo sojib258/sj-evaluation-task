@@ -72,6 +72,14 @@ const SignIn = () => {
       fullname: decodedValue.name,
       loggedin: true,
     });
+    // Storing the data in localstorage
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        fullname: decodedValue.name,
+        loggedin: true,
+      })
+    );
     router.push("/");
   };
 
