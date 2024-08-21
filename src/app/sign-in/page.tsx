@@ -1,7 +1,9 @@
 "use client";
+import { useUser } from "@/context/UserContext";
 import type { CheckboxProps } from "antd";
 import { Button, Checkbox, Col, Row, message } from "antd";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -9,8 +11,10 @@ type FormFields = {
   username: string;
   password: string;
 };
-const page = () => {
+const SignIn = () => {
   const [loading, setLoading] = useState(false);
+  const { setUser } = useUser();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -26,9 +30,28 @@ const page = () => {
   ) => {
     try {
       setLoading(true);
-      message.success(
-        `You Username: ${formData.username} & Your Password: ${formData.password}`
+      // Showing toast message
+      const hideLoadingMessage = message.loading("Logging...", 0);
+      // Simulate a delay for 2 seconds
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      hideLoadingMessage();
+      message.success("Login successful!");
+
+      // set user in context
+      setUser({
+        fullname: formData.username,
+        loggedin: true,
+      });
+
+      // Storing the data in localstorage
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          username: formData.username,
+          loggedin: true,
+        })
       );
+      router.push("/");
     } catch (error) {
       message.error("Something went wrong!");
     } finally {
@@ -59,7 +82,7 @@ const page = () => {
               }}
               htmlFor="username"
             >
-              User Name
+              User Name *
             </label>
             <input
               {...register("username", {
@@ -94,7 +117,7 @@ const page = () => {
               }}
               htmlFor="password"
             >
-              Password
+              Password *
             </label>
             <input
               {...register("password", {
@@ -163,4 +186,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default SignIn;

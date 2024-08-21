@@ -1,4 +1,5 @@
 "use client";
+import { useUser } from "@/context/UserContext";
 import type { TableProps } from "antd";
 import { Button, message, Table } from "antd";
 import { useState } from "react";
@@ -42,29 +43,34 @@ const columns: TableProps<DataType>["columns"] = [
 
 const App: React.FC = () => {
   const [data, setData] = useState<DataType[]>();
+  const { user } = useUser();
   const [loading, setLoading] = useState(false);
 
   const handleFetchData = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/users"
-      );
-      const data = await response.json();
+    if (user?.loggedin) {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+        const data = await response.json();
 
-      const customizedData = data.map((user: any) => ({
-        key: user.id,
-        id: user.id,
-        name: user.name,
-        phone: user.phone,
-        email: user.email,
-        city: user.address.city,
-      }));
-      setData(customizedData);
-    } catch (error) {
-      message.error("Error when fetching data!");
-    } finally {
-      setLoading(false);
+        const customizedData = data.map((user: any) => ({
+          key: user.id,
+          id: user.id,
+          name: user.name,
+          phone: user.phone,
+          email: user.email,
+          city: user.address.city,
+        }));
+        setData(customizedData);
+      } catch (error) {
+        message.error("Error when fetching data!");
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      message.error("You have to login first for fetching data");
     }
   };
 

@@ -1,3 +1,4 @@
+"use client";
 import Table from "@/components/Table";
 import { Col, Row } from "antd";
 export default function Home() {
