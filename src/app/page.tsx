@@ -1,5 +1,11 @@
-import Layout from "@/components/Layout";
-
+import Table from "@/components/Table";
+import { Col, Row } from "antd";
 export default function Home() {
-  return <Layout />;
+  return (
+    <Row className="min-h-[calc(100vh-14vh)]">
+      <Col className="m-auto" span={16}>
+        <Table />
+      </Col>
+    </Row>
+  );
 }

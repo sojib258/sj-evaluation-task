@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 const Header = () => {
   return (
-    <div className="flex justify-between items-center">
+    <header className="flex justify-between items-center">
       <Link href={"/"}>
         <Image
           className="h-8 w-auto"
@@ -14,20 +14,22 @@ const Header = () => {
         />
       </Link>
       <div>
-        <Button
-          style={{
-            fontSize: "16px",
-            color: "white",
-            border: "1px solid white",
-            outline: "none",
-          }}
-          type="text"
-          className="text-9xl"
-        >
-          Log In
-        </Button>
+        <Link href={"/sign-in"}>
+          <Button
+            style={{
+              fontSize: "16px",
+              color: "white",
+              border: "1px solid white",
+              outline: "none",
+            }}
+            type="text"
+            className="text-9xl"
+          >
+            Log In
+          </Button>
+        </Link>
       </div>
-    </div>
+    </header>
   );
 };
 

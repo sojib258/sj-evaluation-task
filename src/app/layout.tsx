@@ -1,4 +1,7 @@
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { Col, Row } from "antd";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -18,7 +21,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AntdRegistry>{children}</AntdRegistry>
+        <AntdRegistry>
+          <div className="min-h-screen flex flex-col">
+            <Row className="h-12 bg-gray-800">
+              <Col className="m-auto" span={16}>
+                <Header />
+              </Col>
+            </Row>
+            <main className="flex-grow">{children}</main>
+            <Row className="h-12 bg-gray-800">
+              <Col className={"m-auto"} span={16}>
+                <Footer />
+              </Col>
+            </Row>
+          </div>
+        </AntdRegistry>
       </body>
     </html>
   );
